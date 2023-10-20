@@ -9,9 +9,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("helo");
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
+      
     );
   }
 }
