@@ -92,12 +92,20 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.pink.shade100,
-      endDrawer: Drawer(
-          child: ListView(
-        children: const [
-          Text("Home"),
-        ],
-      )),
+      // appBar: AppBar(
+      //   title: const Text(
+      //     "Rakshikha",
+      //     style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),
+      //   ),
+      //   backgroundColor: Colors.pink.shade100,
+      // ),
+      // endDrawer: Drawer(
+      //     backgroundColor: Colors.white,
+      //     child: ListView(
+      //       children: const [
+      //         Text("data"),
+      //       ],
+      //     )),
       body: SlidingSheet(
         elevation: 20,
         cornerRadius: 50,

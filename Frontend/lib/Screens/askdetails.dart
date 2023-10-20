@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:women_safety_app/Screens/tabNavigation.dart';
 import 'homeScreen.dart';
 
 class Askdetails extends StatefulWidget {
@@ -54,7 +55,7 @@ class _AskdetailsState extends State<Askdetails> {
 
               const SizedBox(height: 50),
               GestureDetector(
-                onTap: ()=>{Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Home()))
+                onTap: ()=>{Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const tabNavigation()))
                 },
                 child: Container(
                   height: height*0.07,

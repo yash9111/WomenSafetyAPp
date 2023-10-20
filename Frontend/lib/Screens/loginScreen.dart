@@ -17,7 +17,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-
     TextEditingController phoneNumberController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
@@ -35,10 +34,11 @@ class _LoginPageState extends State<LoginPage> {
         final response = await http.post(uri, body: request);
 
         if (response.statusCode == 302) {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
-        }else if(response.statusCode==404){
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        } else if (response.statusCode == 404) {
           print("not found");
-        }else {
+        } else {
           print("not ok");
         }
       } catch (e) {
@@ -55,18 +55,22 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               Text(
                 "Rakshikha",
-                style:
-                    TextStyle(fontSize: height / 15, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: height / 15, fontWeight: FontWeight.bold),
               ),
-              Image.asset('assets/images/loginimg.png',height: height*0.35,),
-              const SizedBox(height: 30,),
+              Image.asset(
+                'assets/images/loginimg.png',
+                height: height * 0.35,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 30, left: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       TextField(
                         controller: phoneNumberController,
                         decoration: const InputDecoration(
@@ -93,7 +97,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 200),
-                        child: GestureDetector(child: const Text("Forgot Password",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),),
+                        child: GestureDetector(
+                          child: const Text(
+                            "Forgot Password",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17),
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -104,9 +114,11 @@ class _LoginPageState extends State<LoginPage> {
                           child: Container(
                             height: height * 0.07,
                             width: width * 0.5,
-                            decoration:  BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [Colors.pink.shade400, Colors.yellow.shade800]),
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(colors: [
+                                  Colors.pink.shade400,
+                                  Colors.yellow.shade800
+                                ]),
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(30)),
                                 boxShadow: const [
@@ -128,26 +140,31 @@ class _LoginPageState extends State<LoginPage> {
                         height: 40,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 200),
+                        padding: EdgeInsets.only(left: width * 0.5),
                         child: GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const RegistrationScreen()));
-                            },
-                          child:  Container(
-                            height: height*0.07,
-                            width: width*1.8,
-                            child:  const Row(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RegistrationScreen()));
+                          },
+                          child: Container(
+                            height: height * 0.07,
+                            width: width * 1.8,
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Center(
                                   child: Text(
                                     "Signup",
                                     style: TextStyle(
-                                        fontSize: 25, fontWeight: FontWeight.bold),
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                                Icon(Icons.arrow_forward_rounded,color: Colors.orange),
-
+                                Icon(Icons.arrow_forward_rounded,
+                                    color: Colors.orange),
                               ],
                             ),
                           ),
@@ -164,5 +181,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-
