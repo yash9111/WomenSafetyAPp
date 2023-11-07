@@ -1,8 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'homeScreen.dart';
 import 'regristrationScreen.dart';
@@ -15,34 +13,53 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    TextEditingController phoneNumberController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
     void handleloginuser() async {
       Map<String, dynamic> request = {
-        "phone_number": phoneNumberController.toString(),
-        "password": passwordController.toString()
+        "phone_number": phoneNumberController.text,
+        "password": passwordController.text
       };
-      final uri = Uri.parse("http://127.0.0.1:8000/loginuser/");
+      final uri = Uri.parse("http://10.0.2.2:8000/loginuser/");
 
       try {
         final response = await http.post(uri, body: request);
 
         if (response.statusCode == 302) {
+          // ignore: use_build_context_synchronously
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home()));
+              context, MaterialPageRoute(builder: (context) => const Home()));
+          print("done");
         } else if (response.statusCode == 404) {
           print("not found");
         } else {
-          print("not ok");
+          print("error");
         }
       } catch (e) {
-        print(e);
+        AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
       }
     }
 
@@ -50,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 80),
+          padding: EdgeInsets.only(top: height * 0.1),
           child: Column(
             children: <Widget>[
               Text(
@@ -59,15 +76,16 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: height / 15, fontWeight: FontWeight.bold),
               ),
               Image.asset(
-                'assets/images/loginimg.png',
-                height: height * 0.35,
+                'assets/images/loginimg.jpg',
+                height: height * 0.34,
               ),
-              const SizedBox(
-                height: 30,
+              SizedBox(
+                height: height * 0.04,
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 30, left: 30),
+                  padding:
+                      EdgeInsets.only(right: width * 0.05, left: width * 0.05),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -80,33 +98,36 @@ class _LoginPageState extends State<LoginPage> {
                                     BorderRadius.all(Radius.circular(10))),
                             prefixIcon: Icon(Icons.phone_android)),
                       ),
-                      const SizedBox(height: 30),
+                      SizedBox(
+                        height: height * 0.02,
+                      ),
                       TextField(
                         controller: passwordController,
                         obscureText: false,
                         decoration: const InputDecoration(
-                          labelText: 'Password',
+                          labelText: "Password",
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
                           prefixIcon: Icon(Icons.password),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      SizedBox(
+                        height: height * 0.02,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 200),
+                        padding: EdgeInsets.only(left: width * 0.57),
                         child: GestureDetector(
-                          child: const Text(
+                          child: Text(
                             "Forgot Password",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17),
+                                fontWeight: FontWeight.bold,
+                                fontSize: height * 0.02),
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      SizedBox(
+                        height: height * 0.04,
                       ),
                       Center(
                         child: GestureDetector(
@@ -126,11 +147,12 @@ class _LoginPageState extends State<LoginPage> {
                                       color: Colors.purpleAccent,
                                       offset: Offset(2, 2))
                                 ]),
-                            child: const Center(
+                            child: Center(
                               child: Text(
                                 "Login",
                                 style: TextStyle(
-                                    fontSize: 25, fontWeight: FontWeight.bold),
+                                    fontSize: height * 0.038,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -149,21 +171,21 @@ class _LoginPageState extends State<LoginPage> {
                                     builder: (context) =>
                                         const RegistrationScreen()));
                           },
-                          child: Container(
+                          child: SizedBox(
                             height: height * 0.07,
                             width: width * 1.8,
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Center(
                                   child: Text(
                                     "Signup",
                                     style: TextStyle(
-                                        fontSize: 25,
+                                        fontSize: height * 0.035,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                                Icon(Icons.arrow_forward_rounded,
+                                const Icon(Icons.arrow_forward_rounded,
                                     color: Colors.orange),
                               ],
                             ),

@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:women_safety_app/Screens/tabNavigation.dart';
-import 'homeScreen.dart';
 
 class Askdetails extends StatefulWidget {
   const Askdetails({super.key});
