@@ -10,6 +10,11 @@ class Map extends StatefulWidget {
 class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/smmopmaps.png'),
+              fit: BoxFit.cover)),
+    );
   }
 }

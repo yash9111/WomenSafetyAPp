@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:women_safety_app/Widgets/tabNavigation.dart';
 import 'homeScreen.dart';
 import 'regristrationScreen.dart';
 
@@ -131,7 +132,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Center(
                         child: GestureDetector(
-                          onTap: () => {handleloginuser()},
+                          onTap: () => {
+                            // handleloginuser()
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const tabNavigation()))
+                          },
                           child: Container(
                             height: height * 0.07,
                             width: width * 0.5,

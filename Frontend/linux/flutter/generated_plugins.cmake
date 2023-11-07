@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  realm
   smart_auth
   url_launcher_linux
 )
