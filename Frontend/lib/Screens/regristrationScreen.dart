@@ -10,36 +10,36 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  TextEditingController NumberController = TextEditingController();
-  TextEditingController countrycode = TextEditingController();
-  
+  TextEditingController numberController = TextEditingController();
+  TextEditingController countryCode = TextEditingController();
+
   @override
   void initState() {
-    // TODO: implement initState
-    countrycode.text = '+91';
+    countryCode.text = '+91';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-
-    void sendcrend() async{
+    void sendcrend() async {
       final uri = Uri.parse("http://10.0.2.2:8000/postotp/");
-      Map<String ,dynamic> request = {"phone_number":countrycode.text+NumberController.text};
-      try{
-        final responce = await http.post(uri,body: request);
-        
-        if (responce.statusCode==200){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>otpScreen()));
-        }else{
+      Map<String, dynamic> request = {
+        "phone_number": countryCode.text + numberController.text
+      };
+      try {
+        final responce = await http.post(uri, body: request);
+
+        if (responce.statusCode == 200) {
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const otpScreen()));
+        } else {
           print("error 304");
         }
-      }
-      catch(e){
+      } catch (e) {
         print(e.toString());
       }
     }
@@ -49,52 +49,91 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children:[
-             Stack(
-               clipBehavior: Clip.none,
-                 children:[ Padding(
-               padding: const EdgeInsets.only(top:80,left: 200),
-               child: Image.asset("assets/images/girlwithphone.png",width: width*0.55),
-             ),
-               Padding(
-                 padding: const EdgeInsets.only(top: 280,left: 0),
-                 child: Image.asset("assets/images/chatimg.png",width: width*0.55,),
-               ),
-                    const Padding(
-                     padding: EdgeInsets.only(top: 150,left: 20),
-                     child: Text("Signup",style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold,color: Colors.blueGrey),),
-                   )
-    ]
-             ),
-            const SizedBox(height: 50,),
+          children: [
+            Stack(clipBehavior: Clip.none, children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 80, left: 200),
+                child: Image.asset("assets/images/girlwithphone.png",
+                    width: width * 0.55),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 280, left: 0),
+                child: Image.asset(
+                  "assets/images/chatimg.png",
+                  width: width * 0.55,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 150, left: 20),
+                child: Text(
+                  "Signup",
+                  style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey),
+                ),
+              )
+            ]),
+            const SizedBox(
+              height: 50,
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: TextField(
-                controller: NumberController,
+                controller: numberController,
                 keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(labelText: 'Phone Number',border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-
-                    prefixIcon: Icon(Icons.phone_android,color: Colors.blueGrey,)),
+                decoration: const InputDecoration(
+                    labelText: 'Phone Number',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    prefixIcon: Icon(
+                      Icons.phone_android,
+                      color: Colors.blueGrey,
+                    )),
               ),
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             Center(
               child: GestureDetector(
-                onTap: ()=>{Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const otpScreen()))
-              },
-
+                onTap: () => {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const otpScreen()))
+                },
                 child: Container(
-                height: height*0.07,
-                width: width*0.5,
-                decoration: const BoxDecoration(gradient: LinearGradient(colors: [Colors.pink,Colors.pinkAccent],begin: Alignment.topLeft,end: Alignment.bottomRight),borderRadius: BorderRadius.all(Radius.circular(30)),
-                boxShadow: [BoxShadow(offset: Offset(2,2),color: Colors.grey,spreadRadius: 3,blurRadius: 5,blurStyle: BlurStyle.inner)]),
-                child:const Center(child: Text("Create Account",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w400,color: Colors.white70),)),
-              ),),
+                  height: height * 0.07,
+                  width: width * 0.5,
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Colors.pink, Colors.pinkAccent],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(2, 2),
+                            color: Colors.grey,
+                            spreadRadius: 3,
+                            blurRadius: 5,
+                            blurStyle: BlurStyle.inner)
+                      ]),
+                  child: const Center(
+                      child: Text(
+                    "Create Account",
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white70),
+                  )),
+                ),
+              ),
             )
           ],
         ),
       ),
     );
-
-}
+  }
 }

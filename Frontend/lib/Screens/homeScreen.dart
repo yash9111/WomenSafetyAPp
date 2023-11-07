@@ -156,7 +156,7 @@ class _HomeState extends State<Home> {
                       Slidingsheet(
                         text: 'Women Helpline',
                         imagePath: 'assets/images/womenhelp.jpg',
-                        onTap: () {},
+                        onTap: () {makeCall();},
                       ),
                     ],
                   ),
@@ -168,12 +168,12 @@ class _HomeState extends State<Home> {
                       Slidingsheet(
                         text: 'Police',
                         imagePath: 'assets/images/dialhund.jpg',
-                        onTap: () {},
+                        onTap: () {makeCall();},
                       ),
                       Slidingsheet(
                         text: 'Ambulacne',
                         imagePath: 'assets/images/ambulance.jpeg',
-                        onTap: () {},
+                        onTap: () {makeCall();},
                       ),
                     ],
                   ),
@@ -185,7 +185,7 @@ class _HomeState extends State<Home> {
                       Slidingsheet(
                         text: 'SMS',
                         imagePath: 'assets/images/sms.jpg',
-                        onTap: () {},
+                        onTap: () {makeCall();},
                       ),
                       Slidingsheet(
                         text: 'Audio',

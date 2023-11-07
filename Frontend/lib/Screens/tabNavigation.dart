@@ -16,13 +16,13 @@ class tabNavigation extends StatefulWidget {
 class _tabNavigationState extends State<tabNavigation> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
+    return MaterialApp(debugShowCheckedModeBanner: false,
+      home: DefaultTabController(animationDuration: const Duration(seconds: 1),
         length: 4, // Number of tabs
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.pink.shade400,
-            bottom: TabBar(
+            backgroundColor: Colors.pink.shade100,
+            bottom: const TabBar(
               tabs: <Widget>[
                 Tab(text: "Home"),
                 Tab(text: 'Map'),
@@ -31,7 +31,7 @@ class _tabNavigationState extends State<tabNavigation> {
               ],
             ),
           ),
-          body: TabBarView(
+          body: const TabBarView(
             children: <Widget>[Home(), Map(), Tips(), Profile()],
           ),
         ),

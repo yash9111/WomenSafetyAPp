@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
 import 'package:women_safety_app/Screens/homeScreen.dart';
-import 'askdetails.dart';
 
 
 class otpScreen extends StatefulWidget {
@@ -17,7 +15,7 @@ class _otpScreenState extends State<otpScreen> {
 
   TextEditingController OtpController = TextEditingController();
 
-  void checkotp()async{
+  void checkOtp()async{
     final uri = Uri.parse("http://10.0.2.2:8000/checkotp/");
     Map<String,dynamic> request = {'otp':OtpController.text};
 
@@ -25,7 +23,7 @@ class _otpScreenState extends State<otpScreen> {
       final responce = await http.post(uri,body: request);
       if(responce.statusCode==200){
         Navigator.pushAndRemoveUntil(
-            context, MaterialPageRoute(builder: (context)=>Home()),
+            context, MaterialPageRoute(builder: (context)=>const Home()),
                 (route) => false);
       }
     }catch(error){
@@ -70,12 +68,11 @@ class _otpScreenState extends State<otpScreen> {
             const SizedBox(height: 30,),
             Center(
               child: GestureDetector(
-                onTap: ()=>{Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Askdetails()))
-              },
+                onTap: ()=>{checkOtp()},
                 child: Container(
                   height: height*0.07,
                   width: width*0.5,
-                  decoration:  BoxDecoration(gradient: LinearGradient(colors: [Colors.pink.shade200,Colors.pink.shade200],begin: Alignment.topLeft,end: Alignment.bottomRight),borderRadius: BorderRadius.all(Radius.circular(30)),
+                  decoration:  BoxDecoration(gradient: LinearGradient(colors: [Colors.pink.shade200,Colors.pink.shade200],begin: Alignment.topLeft,end: Alignment.bottomRight),borderRadius: const BorderRadius.all(Radius.circular(30)),
                       boxShadow: const [BoxShadow(offset: Offset(2,2),color: Colors.grey,spreadRadius: 3,blurRadius: 5,blurStyle: BlurStyle.inner)]),
                   child:const Center(child: Text("Create Account",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w400,color: Colors.black),)),
                 ),),
