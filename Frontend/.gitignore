@@ -44,4 +44,4 @@ app.*.map.json
 /android/app/release
 
 
-lib/DBhelper/consts.dart
+Frontend/lib/DBhelper/consts.dart
