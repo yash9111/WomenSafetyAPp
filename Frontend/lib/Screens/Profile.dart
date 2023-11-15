@@ -1,4 +1,14 @@
+import 'dart:convert';
+// import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:mongo_dart/mongo_dart.dart' as M;
+import 'package:women_safety_app/DBhelper/db_connection.dart';
+import 'package:women_safety_app/Widgets/blogPost.dart';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key});
@@ -8,134 +18,307 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final String userName = "John Doe";
-  final String userImageURL =
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"; // Replace with your user's image URL
+  final String username = "John Doe";
+  final String image = "https://source.unsplash.com/user/c_v_r";
+  List<Post> posts = [];
+  // final dbConnection dbConnection = dbConnection();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController imageController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
 
-  final List<InstagramPost> posts = [
-    InstagramPost(
-      userName: "johndoe",
-      userImageURL:
-          "https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D",
-      postImageURL:
-          "https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D",
-      postDescription: "This is a great day!",
-    ),
-    InstagramPost(
-      userName: "Yash",
-      userImageURL:
-          // "https://unsplash.com/photos/man-in-black-button-up-shirt-ZHvM3XIOHoE",
-          "https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=1286",
-      postImageURL:
-          "https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=1286",
-      // "https://unsplash.com/photos/man-in-black-button-up-shirt-ZHvM3XIOHoE",
-      postDescription: "This is a great day!",
-    ),
-    InstagramPost(
-      userName: "Darshan",
-      userImageURL:
-          "https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=1286",
-      postImageURL:
-          "https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=1286",
-      // "https://unsplash.com/photos/closeup-photography-of-woman-smiling-mEZ3PoFGs_k",
-      postDescription: "This is a great day!",
-    ),
-    // Add more posts as needed
-  ];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  XFile? _image;
+
+  Future<void> _getImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      setState(() {
+        _image = pickedImage;
+      });
+
+      // Upload the image to GitHub
+    }
+  }
+
+  Future<String> uploadImageToGitHub(XFile image) async {
+    String file_name = DateTime.now().millisecondsSinceEpoch.toString();
+    final String apiUrl =
+        'https://api.github.com/repos/yash9111/Datastore/contents/images/${file_name}.png';
+    final String token = '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';
+
+    String base64Image = base64Encode(File(image.path).readAsBytesSync());
+
+    final response = await http.put(
+      Uri.parse(apiUrl),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'message': 'Upload image',
+        'content': base64Image,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      print('Image uploaded successfully.');
+      return file_name;
+    } else {
+      print('Failed to upload image. Status code: ${response.statusCode}');
+      return "Something went wrong";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(16.0),
-            child: Column(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: dbConnection.getPosts(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While data is being fetched, display a circular progress indicator
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            // If an error occurs during fetching, display an error message
+            return Center(
+              child: Text('Error fetching posts: ${snapshot.error}'),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // If no data is available, display a message indicating no posts
+            return Center(
+              child: Text('No posts available.'),
+            );
+          } else {
+            // Data has been successfully fetched, update the posts list
+            posts = snapshot.data!
+                .map((postMap) => Post(
+                      id: postMap['id'],
+                      username: postMap['username'],
+                      image: postMap['image'],
+                      description: postMap['description'],
+                      likeCount: postMap['likeCount'],
+                      title: postMap['title'],
+                    ))
+                .toList();
+
+            return Column(
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(userImageURL),
+                Container(
+                  decoration: BoxDecoration(
+                      boxShadow: [BoxShadow(blurRadius: 5)],
+                      color: Colors.white),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(image),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 10),
-                Text(userName, style: TextStyle(fontSize: 20)),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      return InstagramPostWidget(post: post);
+                    },
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showNewPostDialog(context);
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _showNewPostDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('New Post'),
+          content: Container(
+            height: 500,
+            width: 200,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: usernameController,
+                  decoration: InputDecoration(labelText: 'Username'),
+                ),
+                // TextField(
+                //   controller: imageController,
+                //   decoration: InputDecoration(labelText: 'Image URL'),
+                // ),
+
+                TextField(
+                  controller: titleController,
+                  decoration: InputDecoration(labelText: 'Title'),
+                ),
+                TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(labelText: 'Description'),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                OutlinedButton(
+                    onPressed: () {
+                      _getImage();
+                    },
+                    child: Text("Choose Image")),
               ],
             ),
           ),
-          // Separator Line
-          Divider(
-            color: Colors.black,
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: posts.length,
-              itemBuilder: (context, index) {
-                final post = posts[index];
-                return InstagramPostWidget(post: post);
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
               },
+              child: Text('Cancel'),
             ),
+            TextButton(
+              onPressed: () async {
+                imageController.text = await uploadImageToGitHub(_image!);
+                _addNewPost();
+
+                Navigator.pop(context);
+              },
+              child: Text('Post'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _addNewPost() {
+    String image_name = imageController.text;
+    String enteredUsername = usernameController.text;
+    String enteredImage =
+        'https://raw.githubusercontent.com/yash9111/Datastore/master/images/$image_name.png';
+    String enteredTitle = titleController.text;
+    String enteredDescription = descriptionController.text;
+
+    var id = M.ObjectId();
+    Post newPost = Post(
+      id: id.toString(),
+      username: enteredUsername,
+      image: enteredImage,
+      title: enteredTitle,
+      description: enteredDescription,
+      likeCount: 0,
+    );
+
+    dbConnection.insertPost(newPost);
+    posts.add(newPost);
+    setState(() {});
+
+    // Clear the controllers
+    usernameController.clear();
+    imageController.clear();
+    titleController.clear();
+    descriptionController.clear();
+  }
+}
+
+class InstagramPostWidget extends StatefulWidget {
+  final Post post;
+
+  InstagramPostWidget({required this.post});
+
+  @override
+  _InstagramPostWidgetState createState() => _InstagramPostWidgetState();
+}
+
+class _InstagramPostWidgetState extends State<InstagramPostWidget> {
+  bool isLiked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.network(widget.post.image),
+          SizedBox(height: 8.0),
+          ListTile(
+            leading: CircleAvatar (
+              radius: 20,
+              backgroundImage: NetworkImage(widget.post.image),
+            ),
+            title: Text(widget.post.username),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              widget.post.title,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              widget.post.description,
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w100,
+                  color: Colors.grey),
+            ),
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: isLiked
+                    ? Icon(Icons.favorite, color: Colors.red)
+                    : Icon(Icons.favorite_border),
+                onPressed: () {
+                  _handleLikeButton();
+                },
+              ),
+              Text("${widget.post.likeCount} Likes"),
+            ],
           ),
         ],
       ),
     );
   }
-}
 
-class InstagramPost {
-  final String userName;
-  final String userImageURL;
-  final String postImageURL;
-  final String postDescription;
+  void _handleLikeButton() {
+    setState(() {
+      if (isLiked) {
+        // Unlike post
+        widget.post.likeCount -= 1;
+      } else {
+        // Like post
+        widget.post.likeCount += 1;
+      }
+      isLiked = !isLiked;
 
-  InstagramPost({
-    required this.userName,
-    required this.userImageURL,
-    required this.postImageURL,
-    required this.postDescription,
-  });
-}
-
-class InstagramPostWidget extends StatelessWidget {
-  final InstagramPost post;
-
-  InstagramPostWidget({required this.post});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // User Information
-          ListTile(
-            leading: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(post.userImageURL),
-            ),
-            title: Text(post.userName),
-          ),
-          // Post Image
-          Image.network(post.postImageURL),
-          // Like Button
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.favorite_border),
-                onPressed: () {
-                  // Handle liking the post
-                },
-              ),
-              Text("Like"),
-            ],
-          ),
-          // Post Description
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(post.postDescription),
-          ),
-        ],
-      ),
-    );
+      dbConnection.updateLikeCount(widget.post.id, widget.post.likeCount);
+    });
   }
 }
