@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'package:women_safety_app/DBhelper/db_connection.dart';
 import 'package:women_safety_app/Widgets/blogPost.dart';
+import 'package:women_safety_app/DBhelper/consts.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -51,14 +52,13 @@ class _ProfileState extends State<Profile> {
     String file_name = DateTime.now().millisecondsSinceEpoch.toString();
     final String apiUrl =
         'https://api.github.com/repos/yash9111/Datastore/contents/images/${file_name}.png';
-    final String token = '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';
 
     String base64Image = base64Encode(File(image.path).readAsBytesSync());
 
     final response = await http.put(
       Uri.parse(apiUrl),
       headers: {
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $GITHUB_TOKEN',
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
@@ -266,7 +266,7 @@ class _InstagramPostWidgetState extends State<InstagramPostWidget> {
           Image.network(widget.post.image),
           SizedBox(height: 8.0),
           ListTile(
-            leading: CircleAvatar (
+            leading: CircleAvatar(
               radius: 20,
               backgroundImage: NetworkImage(widget.post.image),
             ),
