@@ -2,11 +2,13 @@
 
 import 'package:background_sms/background_sms.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sliding_sheet2/sliding_sheet2.dart';
 import 'slidingsheet.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:geocoding/geocoding.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -33,8 +35,12 @@ class _HomeState extends State<Home> {
       final currentLocation = await _getCurrentPosition();
       final latitude = currentLocation.latitude;
       final longitude = currentLocation.longitude;
+
+      // Get location name from coordinates
+      String locationName = await _getLocationName(latitude, longitude);
+
       final messageWithLocation =
-          "Help! Latitude: $latitude, Longitude: $longitude\n$message";
+          "Help! Location: $locationName, Latitude: $latitude, Longitude: $longitude\n$message";
 
       var result = await BackgroundSms.sendMessage(
           phoneNumber: phoneNumber,
@@ -47,6 +53,23 @@ class _HomeState extends State<Home> {
       }
     } else {
       await _getPermission();
+    }
+  }
+
+  Future<String> _getLocationName(double latitude, double longitude) async {
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
+
+      if (placemarks != null && placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        return "${place.name}, ${place.locality}, ${place.country}";
+      } else {
+        return 'Location not found';
+      }
+    } catch (e) {
+      print("Error: $e");
+      return 'Failed to get location';
     }
   }
 
@@ -123,8 +146,48 @@ class _HomeState extends State<Home> {
             child: Padding(
           padding: const EdgeInsets.only(bottom: 180),
           child: GestureDetector(
-            onTap: () => _sendMessageWithLocation(
-                '9827763713', 'All Task Clear Co-founder'),
+            onTap: () {
+              print("Image pressed ");
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Send SOS"),
+                    content: const Text(
+                        "Are you sure you want to send SOS to your eergency contacts?"),
+                    actions: <Widget>[
+                      TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text(
+                            "cancle",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pink),
+                          )),
+                      TextButton(
+                          onPressed: () {
+                            _sendMessageWithLocation(
+                                '9827763713', 'All Task Clear Co-founder');
+
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Emergency alert sent with your current location.",
+                                toastLength: Toast.LENGTH_LONG,
+                                backgroundColor: Colors.pink.shade400,
+                                textColor: Colors.white);
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "send",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pink),
+                          )),
+                    ],
+                  );
+                },
+              );
+            },
             child: const CircleAvatar(
               radius: 100,
               backgroundImage: AssetImage('assets/images/emergencyimg.png'),
@@ -136,7 +199,7 @@ class _HomeState extends State<Home> {
           // scrolled, if the content is bigger than the available
           // height of the sheet.
           return SizedBox(
-            height: 500,
+            height: 600,
             child: Center(
                 child: Padding(
               padding: const EdgeInsets.only(top: 40),
@@ -156,7 +219,9 @@ class _HomeState extends State<Home> {
                       Slidingsheet(
                         text: 'Women Helpline',
                         imagePath: 'assets/images/womenhelp.jpg',
-                        onTap: () {makeCall();},
+                        onTap: () {
+                          makeCall();
+                        },
                       ),
                     ],
                   ),
@@ -168,12 +233,16 @@ class _HomeState extends State<Home> {
                       Slidingsheet(
                         text: 'Police',
                         imagePath: 'assets/images/dialhund.jpg',
-                        onTap: () {makeCall();},
+                        onTap: () {
+                          makeCall();
+                        },
                       ),
                       Slidingsheet(
                         text: 'Ambulacne',
                         imagePath: 'assets/images/ambulance.jpeg',
-                        onTap: () {makeCall();},
+                        onTap: () {
+                          makeCall();
+                        },
                       ),
                     ],
                   ),
@@ -185,7 +254,9 @@ class _HomeState extends State<Home> {
                       Slidingsheet(
                         text: 'SMS',
                         imagePath: 'assets/images/sms.jpg',
-                        onTap: () {makeCall();},
+                        onTap: () {
+                          makeCall();
+                        },
                       ),
                       Slidingsheet(
                         text: 'Audio',

@@ -53,6 +53,8 @@ dependencies:
   firebase_core: ^2.21.0
   firebase_auth: ^4.12.1
   image_picker: ^1.0.4
+  video_player: ^2.8.1
+  chewie: ^1.7.1
 
 
 dev_dependencies:
@@ -80,6 +82,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/images/
+     - assets/videos/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
