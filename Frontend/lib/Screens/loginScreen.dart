@@ -74,11 +74,11 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 "Rakshikha",
                 style: TextStyle(
-                    fontSize: height / 15, fontWeight: FontWeight.bold),
+                    fontSize: height / 18, fontWeight: FontWeight.bold),
               ),
               Image.asset(
                 'assets/images/loginimg.jpg',
-                height: height * 0.34,
+                height: height * 0.29,
               ),
               SizedBox(
                 height: height * 0.04,
@@ -116,14 +116,14 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: height * 0.02,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width * 0.57),
+                      Positioned(
+                        right: 10,
                         child: GestureDetector(
                           child: Text(
                             "Forgot Password",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: height * 0.02),
+                                fontSize: height * .02),
                           ),
                         ),
                       ),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:women_safety_app/Screens/homeScreen.dart';
 import 'package:women_safety_app/Screens/Map.dart';
@@ -23,11 +25,14 @@ class _tabNavigationState extends State<tabNavigation> {
             title: Text("Rakshika"),
             backgroundColor: Colors.pink.shade400,
             bottom: TabBar(
+              labelStyle: TextStyle(fontSize: 15),
               tabs: <Widget>[
                 Tab(text: "Home"),
                 Tab(text: 'Map'),
                 Tab(text: 'Tips'),
-                Tab(text: 'Profile'),
+                Tab(
+                  text: 'Posts',
+                ),
               ],
             ),
             actions: <Widget>[
@@ -55,7 +60,7 @@ class _tabNavigationState extends State<tabNavigation> {
                   color: Colors.black,
                 ),
                 ListTile(
-                  title: Text("Add new "),
+                  title: Text("Profile"),
                   onTap: () {
                     // Handle the item 1 click
                   },
@@ -64,7 +69,7 @@ class _tabNavigationState extends State<tabNavigation> {
                   color: Colors.black,
                 ),
                 ListTile(
-                  title: Text("Blah blah"),
+                  title: Text("Add new contacts"),
                   onTap: () {
                     // Handle the item 2 click
                   },
