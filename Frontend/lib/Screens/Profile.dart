@@ -57,7 +57,7 @@ class _ProfileState extends State<Profile> {
                 ))
             .toList();
       });
-
+      print(posts);
       // To simulate a delay, you can use a sleep function (remove in real use)
       // await Future.delayed(Duration(seconds: 1));
 
@@ -335,7 +335,7 @@ class _InstagramPostWidgetState extends State<InstagramPostWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.network(widget.post.image),
-          SizedBox(height: 8.0),
+          SizedBox(height: 7.0),
           ListTile(
             leading: CircleAvatar(
               radius: 20,
