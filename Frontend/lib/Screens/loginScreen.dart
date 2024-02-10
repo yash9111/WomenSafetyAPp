@@ -1,7 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:women_safety_app/Api%20Services/checkLogin.dart';
+import 'package:women_safety_app/Screens/askdetails.dart';
 import 'package:women_safety_app/Widgets/tabNavigation.dart';
 import 'homeScreen.dart';
 import 'regristrationScreen.dart';
@@ -14,55 +17,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
-    void handleloginuser() async {
-      Map<String, dynamic> request = {
-        "phone_number": phoneNumberController.text,
-        "password": passwordController.text
-      };
-      final uri = Uri.parse("http://10.0.2.2:8000/loginuser/");
-
-      try {
-        final response = await http.post(uri, body: request);
-
-        if (response.statusCode == 302) {
-          // ignore: use_build_context_synchronously
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const Home()));
-          print("done");
-        } else if (response.statusCode == 404) {
-          print("not found");
-        } else {
-          print("error");
-        }
-      } catch (e) {
-        AlertDialog(
-          title: const Text('AlertDialog Title'),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Approve'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      }
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,11 +34,11 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 "Rakshikha",
                 style: TextStyle(
-                    fontSize: height / 18, fontWeight: FontWeight.bold),
+                    fontSize: height / 19, fontWeight: FontWeight.bold),
               ),
               Image.asset(
                 'assets/images/loginimg.jpg',
-                height: height * 0.29,
+                height: height * 0.27,
               ),
               SizedBox(
                 height: height * 0.04,
@@ -91,9 +51,9 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextField(
-                        controller: phoneNumberController,
+                        controller: emailController,
                         decoration: const InputDecoration(
-                            labelText: 'Phone Number',
+                            labelText: 'Email',
                             border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
@@ -132,13 +92,23 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Center(
                         child: GestureDetector(
-                          onTap: () => {
+                          onTap: () async {
                             // handleloginuser()
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const tabNavigation()))
+                            showLoder();
+                            if (await (checkLogin(
+                                emailController.text.toString(),
+                                passwordController.text.toString()))) {
+                              hideLoder();
+                              Fluttertoast.showToast(msg: 'Login Succesful');
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const tabNavigation()));
+                            } else {
+                              hideLoder();
+                              Fluttertoast.showToast(msg: "Wrong Credentials");
+                            }
                           },
                           child: Container(
                             height: height * 0.07,
@@ -176,11 +146,10 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RegistrationScreen()));
+                                    builder: (context) => const Askdetails()));
                           },
                           child: SizedBox(
-                            height: height * 0.07,
+                            height: height * 0.05,
                             width: width * 1.8,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -189,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     "Signup",
                                     style: TextStyle(
-                                        fontSize: height * 0.035,
+                                        fontSize: height * 0.025,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -209,5 +178,21 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void showLoder() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
+  void hideLoder() {
+    Navigator.of(context).pop();
   }
 }

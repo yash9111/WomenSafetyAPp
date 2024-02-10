@@ -81,7 +81,7 @@ class _tabNavigationState extends State<tabNavigation> {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[Home(), Map(), Tips(), Profile()],
+            children: <Widget>[Home(), MapWidget(), Tips(), Profile()],
           ),
         ),
       ),

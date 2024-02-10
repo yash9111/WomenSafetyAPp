@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
     return smsPermissionStatus && locationPermissionStatus;
   }
 
-  _sendMessageWithLocation(String phoneNumber, String message,
+  sendMessageWithLocation(String phoneNumber, String message,
       {int? simSlot}) async {
     if (await _isPermissionGranted()) {
       final currentLocation = await _getCurrentPosition();
@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
       String locationName = await _getLocationName(latitude, longitude);
 
       final messageWithLocation =
-          "Help! Location: $locationName, Latitude: $latitude, Longitude: $longitude\n$message";
+          "Help!I am in danger ,Track me at http://maps.google.com/?q=$latitude,$longitude\n$message";
 
       var result = await BackgroundSms.sendMessage(
           phoneNumber: phoneNumber,
@@ -166,7 +166,8 @@ class _HomeState extends State<Home> {
                           )),
                       TextButton(
                           onPressed: () {
-                            _sendMessageWithLocation(
+                            
+                            sendMessageWithLocation(
                                 '9827763713', 'All Task Clear Co-founder');
 
                             Fluttertoast.showToast(
@@ -200,6 +201,7 @@ class _HomeState extends State<Home> {
           // height of the sheet.
           return SizedBox(
             height: 600,
+            width: MediaQuery.sizeOf(context).width,
             child: Center(
                 child: Padding(
               padding: const EdgeInsets.only(top: 40),
@@ -217,7 +219,7 @@ class _HomeState extends State<Home> {
                         },
                       ),
                       Slidingsheet(
-                        text: 'Women Helpline',
+                        text: 'Women \nHelpline',
                         imagePath: 'assets/images/womenhelp.jpg',
                         onTap: () {
                           makeCall();
