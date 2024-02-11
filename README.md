@@ -40,18 +40,11 @@ Following are the features available in Rakshikha:
 
 ## Screenshots
 
-![Screenshot_2024-02-11-01-57-43-36_b257c5077f945074331bd43a257b5f99 1](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/f4b978b9-43ca-429d-aa3e-3402d5fbb436) ![Screenshot_2024-02-11-01-59-10-91_b257c5077f945074331bd43a257b5f99 1](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/c0d61b50-1461-499e-8147-47f49046acb4)
+# ![Group 10307](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/34717f50-9c80-4d5e-8119-140aaee219b2)
 
+# ![Group 10305](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/856fa9d4-c996-4348-b34f-8b8510103310)
 
-
-![Screenshot_2024-02-11-01-58-31-91_b257c5077f945074331bd43a257b5f99 1](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/7533ab03-a39b-40d1-a5e4-ff992eea9870)
-![Screenshot_2024-02-11-01-58-23-22_b257c5077f945074331bd43a257b5f99 1](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/25d64732-c255-43c0-b007-4674d84ebdf2)
-![Screenshot_2024-02-11-01-58-14-51_b257c5077f945074331bd43a257b5f99 1](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/9f38dbb3-98aa-406a-be69-d3a71328adf4)
-![Screenshot_2024-02-11-01-58-06-06_b257c5077f945074331bd43a257b5f99 1](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/30bb16f2-4dae-4008-adb8-3d17e3a80f53)
-![Screenshot_2024-02-11-01-57-46-16_b257c5077f945074331bd43a257b5f99 1](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/9d067719-0f3d-4a93-8296-cd3cdf8e918b)
-
-
-
+# ![Group 10306](https://github.com/yash9111/WomenSafetyAPp/assets/95490587/7bdbd538-f1e8-4c1a-8f06-3d5a8034cefc)
 
 ## Deployment
 
